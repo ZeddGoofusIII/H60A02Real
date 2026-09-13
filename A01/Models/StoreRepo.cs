@@ -1,4 +1,5 @@
 ﻿using A01.models;
+using Microsoft.EntityFrameworkCore;
 
 namespace A01.Models
 {
