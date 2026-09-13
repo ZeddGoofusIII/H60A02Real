@@ -1,6 +1,6 @@
 ﻿using A01.models;
 using Microsoft.EntityFrameworkCore;
-
+using A01.Services;
 namespace A01.Models
 {
     public class StoreRepo : IStoreRepo
@@ -81,6 +81,25 @@ namespace A01.Models
         {
             _context.Update(product);
             save();
+        }
+
+
+        public void UpdateStock(int productId, int newStock)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product != null)
+            {
+                try
+                {
+                    Validation.ValidateStock(newStock, product);
+                    product.Stock += newStock;
+                    _context.SaveChanges();
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException(ex.Message);
+                }
+            }
         }
     }
 }

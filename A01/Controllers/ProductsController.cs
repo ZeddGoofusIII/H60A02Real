@@ -48,8 +48,11 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create([Bind("ProductId,ProdCatId,Description,Manufacturer,Stock,BuyPrice,SellPrice,ProdCat")] Product product)
     {
+        //var cat = _repo.GetCategoryById(product.ProdCatId);
+        //product.ProdCat = cat;
         if (ModelState.IsValid)
         {
+
             _repo.InsertProduct(product);
 
             return RedirectToAction(nameof(Index));
@@ -138,8 +141,15 @@ public class ProductsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public IActionResult UpdateStock(int productid)
+    {
+        return View(_repo.GetProductById(productid));
+    }
+
     private bool ProductExists(int? productid)
     {
         return _context.Products.Any(e => e.ProductId == productid);
     }
+
+
 }
