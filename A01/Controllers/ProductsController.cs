@@ -50,8 +50,8 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create([Bind("ProductId,ProdCatId,Description,Manufacturer,Stock,BuyPrice,SellPrice,ProdCat")] Product product)
     {
-        //var cat = _repo.GetCategoryById(product.ProdCatId);
-        //product.ProdCat = cat;
+        var cat = _repo.GetCategoryById(product.ProdCatId);
+        product.ProdCat = cat;
         if (ModelState.IsValid)
         {
 

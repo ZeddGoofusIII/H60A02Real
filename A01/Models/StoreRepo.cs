@@ -61,8 +61,11 @@ namespace A01.Models
 
         public void InsertProduct(Product product)
         {
-
-            _context.Add(product);
+            var pro = product;
+            var cat = _context.ProductCategories.FirstOrDefault(x => x.CategoryId == pro.ProdCatId);
+            pro.ProdCat = cat;
+            _context.Products.Add(pro);
+           
             save();
         }
 
