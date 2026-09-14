@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using A01.models;
 using A01.Models;
+using A01.Services;
 
 public class ProductsController : Controller
 {
@@ -22,6 +23,7 @@ public class ProductsController : Controller
     }
 
     // GET: PRODUCTS/Details/5
+    [Route("Products/Details/{productid}")]
     public IActionResult Details(int? productid)
     {
         if (productid == null)
@@ -112,6 +114,7 @@ public class ProductsController : Controller
     }
 
     // GET: PRODUCTS/Delete/5
+    [Route("Products/Delete/{productid}")]
     public IActionResult Delete(int? productid)
     {
         if (productid == null)
@@ -141,9 +144,20 @@ public class ProductsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Route("Products/UpdateStock/{productid}")]
     public IActionResult UpdateStock(int productid)
     {
-        return View(_repo.GetProductById(productid));
+ 
+        var helper = new StockHelper() { Prodid = productid, StockChange = 0};
+        return View(helper);
+    }
+
+    [HttpPost]
+    [Route("Products/UpdateStock/{productid}")]
+    public IActionResult UpdateStock(StockHelper helper)
+    {
+        _repo.UpdateStock(helper.Prodid, helper.StockChange);
+        return RedirectToAction(nameof(Index));
     }
 
     private bool ProductExists(int? productid)

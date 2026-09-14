@@ -61,6 +61,7 @@ namespace A01.Models
 
         public void InsertProduct(Product product)
         {
+
             _context.Add(product);
             save();
         }

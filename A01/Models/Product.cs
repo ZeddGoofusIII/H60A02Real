@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace A01.models;
 
@@ -19,5 +20,6 @@ public partial class Product
 
     public decimal? SellPrice { get; set; }
 
+    
     public virtual ProductCategory ProdCat { get; set; } = null!;
 }
