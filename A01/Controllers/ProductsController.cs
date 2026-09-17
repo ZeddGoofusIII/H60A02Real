@@ -43,12 +43,9 @@ public class ProductsController : Controller
         return View();
     }
 
-    // POST: PRODUCTS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create([Bind("ProductId,ProdCatId,Description,Manufacturer,Stock,BuyPrice,SellPrice,ProdCat")] Product product)
+    public async Task<IActionResult> Create(Product product)
     {
         var cat = _repo.GetCategoryById(product.ProdCatId);
         product.ProdCat = cat;

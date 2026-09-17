@@ -8,7 +8,7 @@ namespace A01.Models
 
         IEnumerable<ProductCategory> GetCategories();
 
-        void InsertProduct(Product product);
+        bool InsertProduct(Product product);
 
         void UpdateProduct(Product product);
 

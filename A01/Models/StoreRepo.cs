@@ -56,23 +56,20 @@ namespace A01.Models
 
         public IEnumerable<Product> GetProducts()
         {
-            return _context.Products.ToList();
+            return _context.Products.Include(p => p.ProdCat).ToList();
         }
 
-        public void InsertProduct(Product product)
-        {
-            var pro = product;
-            var cat = _context.ProductCategories.FirstOrDefault(x => x.CategoryId == pro.ProdCatId);
-            pro.ProdCat = cat;
-            _context.Products.Add(pro);
+        public bool InsertProduct(Product product)
+        { 
+            _context.Products.Add(product);
            
             save();
+            return true;
         }
 
         public void save()
         {
             _context.SaveChanges();
-            save();
         }
 
         public void UpdateCategory(ProductCategory productCategory)

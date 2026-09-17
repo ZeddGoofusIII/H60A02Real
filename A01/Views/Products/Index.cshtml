@@ -58,7 +58,7 @@
                 @Html.DisplayFor(model => item.SellPrice)
             </td>
             <td>
-                @Html.DisplayFor(model => item.ProdCat)
+                @Html.DisplayFor(model => item.ProdCat.ProdCat)
             </td>
             <td>
                 <a asp-action="UpdateStock" asp-route-id="@item.ProductId">Update Stock</a> |
