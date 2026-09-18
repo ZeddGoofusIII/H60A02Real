@@ -1,4 +1,5 @@
 ﻿using A01.models;
+using A01.Services;
 
 namespace A01.Models
 {
@@ -25,6 +26,8 @@ namespace A01.Models
         ProductCategory GetCategoryById(int categoryId);
 
         void UpdateStock(int productid, int stockChange );
+
+        void UpdatePrice(PriceHelper helper);
         void save();
     }
 }

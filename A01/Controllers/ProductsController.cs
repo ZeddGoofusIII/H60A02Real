@@ -59,56 +59,7 @@ public class ProductsController : Controller
         return View(product);
     }
 
-    // GET: PRODUCTS/Edit/5
-    public IActionResult Edit(int? productid)
-    {
-        if (productid == null)
-        {
-            return NotFound();
-        }
-
-        var product = _repo.GetProductById(productid.Value);
-        if (product == null)
-        {
-            return NotFound();
-        }
-        return View(product);
-    }
-
-    // POST: PRODUCTS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Edit(int? productid, [Bind("ProductId,ProdCatId,Description,Manufacturer,Stock,BuyPrice,SellPrice,ProdCat")] Product product)
-    {
-        if (productid != product.ProductId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                _repo.UpdateProduct(product);
-
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(product.ProductId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(product);
-    }
+    
 
     // GET: PRODUCTS/Delete/5
     [Route("Products/Delete/{productid}")]
@@ -153,9 +104,49 @@ public class ProductsController : Controller
     [Route("Products/UpdateStock/{productid}")]
     public IActionResult UpdateStock(StockHelper helper)
     {
-        _repo.UpdateStock(helper.Prodid, helper.StockChange);
-        return RedirectToAction(nameof(Index));
+        try
+        {
+            _repo.UpdateStock(helper.Prodid, helper.StockChange);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("StockChange", ex.Message);
+            return View(helper);
+        }
+        
+        
     }
+
+
+    [Route("Products/EditPrice/{productid}")]
+    public IActionResult EditPrice(int productid)
+    {
+        var prod = _repo.GetProductById(productid);
+        var helper = new PriceHelper()
+        {
+            ProdId = productid,
+            BuyPrice = prod.BuyPrice,
+            SellPrice = prod.SellPrice
+        };
+        return View(helper);
+    }
+
+    [HttpPost]
+    [Route("Products/EditPrice/{productid}")]
+    public IActionResult EditPrice(PriceHelper helper)
+    {
+        try
+        {
+            _repo.UpdatePrice(helper);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("SellPrice", ex.Message);
+            return View(helper);
+        }
+        }
 
     private bool ProductExists(int? productid)
     {

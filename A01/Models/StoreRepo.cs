@@ -94,7 +94,27 @@ namespace A01.Models
                 {
                     Validation.ValidateStock(newStock, product);
                     product.Stock += newStock;
-                    _context.SaveChanges();
+                    save();
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException(ex.Message);
+                }
+            }
+        }
+
+        public void UpdatePrice(PriceHelper helper)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == helper.ProdId);
+            if (product != null)
+            {
+                try
+                {
+                    Validation.ValidatePrice(helper);
+                    product.SellPrice = helper.SellPrice;
+                    product.BuyPrice = helper.BuyPrice;
+                    _context.Update(product);
+                    save();
                 }
                 catch (ArgumentException ex)
                 {
@@ -103,4 +123,5 @@ namespace A01.Models
             }
         }
     }
-}
+    }
+
