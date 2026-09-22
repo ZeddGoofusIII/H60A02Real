@@ -21,13 +21,15 @@ namespace A01.Models
 
         void addCategory(ProductCategory category);
 
-        Product GetProductById(int productId);
+        Product GetProductById(int? productId);
 
-        ProductCategory GetCategoryById(int categoryId);
+        ProductCategory GetCategoryById(int? categoryId);
 
         void UpdateStock(int productid, int stockChange );
 
         void UpdatePrice(PriceHelper helper);
         void save();
+
+        IEnumerable<Product> ProductsByCategory(int  categoryId);
     }
 }

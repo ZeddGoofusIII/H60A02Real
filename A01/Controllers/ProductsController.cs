@@ -47,7 +47,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Product product)
     {
-        var cat = _repo.GetCategoryById(product.ProdCatId);
+        var cat = _repo.GetCategoryById(product.ProductCategoryId);
         product.ProdCat = cat;
         if (ModelState.IsValid)
         {

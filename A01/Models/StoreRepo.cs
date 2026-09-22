@@ -19,9 +19,9 @@ namespace A01.Models
             save();
         }
 
-        public void DeleteCategory(int categoryId)
+        public void DeleteCategory(int productCategoryId)
         {
-            var category = _context.ProductCategories.Where(x =>  x.CategoryId == categoryId).FirstOrDefault();
+            var category = _context.ProductCategories.Where(x =>  x.ProductCategoryId == productCategoryId).FirstOrDefault();
             if (category != null) {
                 _context.ProductCategories.Remove(category);           
             }
@@ -44,12 +44,12 @@ namespace A01.Models
             return categories;
         }
 
-        public ProductCategory GetCategoryById(int categoryId)
+        public ProductCategory GetCategoryById(int? ProductCategoryId)
         {
-            return _context.ProductCategories.Where(x => x.CategoryId == categoryId).FirstOrDefault();
+            return _context.ProductCategories.Where(x => x.ProductCategoryId == ProductCategoryId).FirstOrDefault();
         }
 
-        public Product GetProductById(int productId)
+        public Product GetProductById(int? productId)
         {
             return _context.Products.Where(x => x.ProductId == productId).FirstOrDefault();
         }
@@ -121,6 +121,11 @@ namespace A01.Models
                     throw new ArgumentException(ex.Message);
                 }
             }
+        }
+
+        public IEnumerable<Product> ProductsByCategory(int categoryId)
+        {
+            return _context.Products.Where(p => p.ProductCategoryId == categoryId).Include(p => p.ProdCat).ToList();
         }
     }
     }

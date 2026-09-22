@@ -29,7 +29,7 @@ public partial class H60AssignmentDbZlContext : DbContext
         {
             entity.ToTable("Product");
 
-            entity.HasIndex(e => e.ProdCatId, "IX_Product_ProdCatId");
+            entity.HasIndex(e => e.ProductCategoryId, "IX_Product_ProductCategoryId");
 
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.BuyPrice).HasColumnType("numeric(8, 2)");
@@ -42,18 +42,18 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.SellPrice).HasColumnType("numeric(8, 2)");
 
             entity.HasOne(d => d.ProdCat).WithMany(p => p.Products)
-                .HasForeignKey(d => d.ProdCatId)
+                .HasForeignKey(d => d.ProductCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Product_ProductCategory");
         });
 
         modelBuilder.Entity<ProductCategory>(entity =>
         {
-            entity.HasKey(e => e.CategoryId);
+            entity.HasKey(e => e.ProductCategoryId);
 
             entity.ToTable("ProductCategory");
 
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+            entity.Property(e => e.ProductCategoryId).HasColumnName("ProductCategoryId");
             entity.Property(e => e.ProdCat)
                 .HasMaxLength(60)
                 .IsUnicode(false);

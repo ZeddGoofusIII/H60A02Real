@@ -8,7 +8,7 @@ public partial class Product
 {
     public int ProductId { get; set; }
 
-    public int ProdCatId { get; set; }
+    public int ProductCategoryId { get; set; }
 
     public string? Description { get; set; }
 
@@ -27,10 +27,10 @@ public partial class Product
         ProductId = productId;
     }
 
-    public Product(int productId, int prodCatId, string? description, string? manufacturer, int stock, decimal? buyPrice, decimal? sellPrice)
+    public Product(int productId, int productCategoryId, string? description, string? manufacturer, int stock, decimal? buyPrice, decimal? sellPrice)
     {
         ProductId = productId;
-        ProdCatId = prodCatId;
+        ProductCategoryId = productCategoryId;
         Description = description;
         Manufacturer = manufacturer;
         Stock = stock;
@@ -38,9 +38,9 @@ public partial class Product
         SellPrice = sellPrice;
     }
 
-    public Product(int prodCatId, string? description, string? manufacturer, int stock, decimal? buyPrice, decimal? sellPrice)
+    public Product(int productCategoryId, string? description, string? manufacturer, int stock, decimal? buyPrice, decimal? sellPrice)
     {
-        ProdCatId = prodCatId;
+        ProductCategoryId = productCategoryId;
         Description = description;
         Manufacturer = manufacturer;
         Stock = stock;
