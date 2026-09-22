@@ -1,4 +1,6 @@
-﻿namespace A01.Models
+﻿using A01.models;
+
+namespace A01.Models
 {
     public class CartItem
     {
@@ -8,6 +10,10 @@
 
         public int ProductId { get; set; }
 
-        pu
+        public int Quantity { get; set; }
+
+        public float Price { get; set; }
+
+        public virtual Product? Product { get; set; }
     }
 }
