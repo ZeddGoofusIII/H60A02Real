@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using A01.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace A01.models;
@@ -18,6 +19,16 @@ public partial class H60AssignmentDbZlContext : DbContext
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+
+    public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+    public virtual DbSet<CartItem> CartItems { get; set; }
+
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -57,6 +68,79 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.ProdCat)
                 .HasMaxLength(60)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.CustomerId);
+
+            entity.HasIndex(e => e.CustomerId, "X_Customer_CustomerId");
+
+            entity.ToTable("Customer");
+
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerId");
+            entity.Property(e => e.Firstname).HasColumnType("varchar(20)");
+            entity.Property(e => e.Lastname).HasColumnType("varchar(30)");
+            entity.Property(e => e.Email).HasColumnType("varchar(30)");
+            entity.Property(e => e.PhoneNumber).HasColumnType("varchar(10)");
+            entity.Property(e => e.Province).HasColumnType("varchar(2)");
+            entity.Property(e => e.CreditCard).HasColumnType("varchar(16)");
+        });
+
+        modelBuilder.Entity<ShoppingCart>(entity =>
+        {
+
+            entity.HasKey(e => e.CartId);
+            entity.ToTable("ShoppingCart");
+
+            entity.Property(e => e.CartId).HasColumnType("int");
+            entity.Property(e => e.DateCreated).HasColumnType("date");
+            entity.Property(e => e.CustomerId).HasColumnType("int");
+            entity.HasOne(e => e.Customer).WithOne(p => p.ShoppingCart);
+        });
+
+        modelBuilder.Entity<CartItem>(entity =>
+        {
+            entity.HasKey(e => e.CartItemId);
+
+            entity.ToTable("CartItem");
+
+            entity.Property(e => e.CartItemId).HasColumnType("int");
+            entity.Property(e => e.Quantity).HasColumnType("int");
+            entity.Property(e => e.Price).HasColumnType("numeric(8,2)");
+            entity.Property(e => e.CartId).HasColumnType("int");
+            entity.Property(e =>e.ProductId).HasColumnType("int");
+            entity.HasOne(p => p.Product).WithMany(c => CartItems).HasForeignKey(p => p.ProductId);
+
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasKey(e => e.OrderId);
+            entity.ToTable("Order");
+
+            entity.Property(e => e.OrderId).HasColumnType("int");
+            entity.Property(e => e.CustomerId).HasColumnType("int");
+            entity.Property(e => e.DateCreated).HasColumnType("date");
+            entity.Property(e => e.DateFulfilled).HasColumnType("date");
+            entity.Property(e => e.Total).HasColumnType("numeric(10,2)");
+            entity.Property(e => e.taxes).HasColumnType("numeric(8,2)");
+            entity.HasOne(e => e.Customer).WithMany(c => c.Orders).HasForeignKey(p => p.CustomerId);
+        });
+
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.HasKey(e => e.OrderItemId);
+            entity.ToTable("OrderItem");
+
+            entity.Property(e => e.OrderItemId).HasColumnType("int");
+            entity.Property(e => e.OrderId).HasColumnType("int");
+            entity.Property(e => e.ProductId).HasColumnType("int");
+            entity.Property(e => e.Quantity).HasColumnType("int");
+            entity.Property(e => e.Price).HasColumnType("numeric(8,2)");
+
+            entity.HasOne(p => p.Product);
+            entity.HasOne(p => p.Order).WithMany(o => o.OrderItems).HasForeignKey(p => p.ProductId);
         });
 
         OnModelCreatingPartial(modelBuilder);

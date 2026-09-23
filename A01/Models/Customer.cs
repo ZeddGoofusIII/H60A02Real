@@ -18,6 +18,6 @@
 
         public virtual IEnumerable<Order>? Orders { get; set; }
 
-        public virtual ShoppingCart? ShoppingCart { get; set; }
+        public virtual ShoppingCart? ShoppingCart { get; set; } = null!;
     }
 }

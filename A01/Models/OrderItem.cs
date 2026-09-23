@@ -15,5 +15,5 @@ public class OrderItem
 
     public virtual Product? Product { get; set; }
 
-    public virtual Customer Customer { get; set; }
+    public virtual Order? Order { get; set; }
 }

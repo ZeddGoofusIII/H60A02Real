@@ -16,6 +16,8 @@ namespace A01.Models
 
         public float taxes { get; set; }
 
-        public virtual IEnumerable<OrderItem>? OrderItems { get; set; }
+        public virtual IEnumerable<OrderItem>? OrderItems { get; set; } = null;
+
+        public virtual Customer? Customer { get; set; }
     }
 }
