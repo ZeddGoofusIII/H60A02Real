@@ -85,6 +85,10 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.PhoneNumber).HasColumnType("varchar(10)");
             entity.Property(e => e.Province).HasColumnType("varchar(2)");
             entity.Property(e => e.CreditCard).HasColumnType("varchar(16)");
+
+            entity.HasData(new Customer { Firstname = "Cassius", Lastname = "Bright", CreditCard = "456789123789546", Email="example@example.com", PhoneNumber="9874566123", CustomerId = 1 },
+                new Customer { Firstname = "Guy", Lastname = "Ofsomekind", CreditCard = "456989123789546", Email = "letme@example.com", PhoneNumber = "9874786123", CustomerId = 2 },
+                new Customer { Firstname = "Olivier", Lastname = "Laurence", CreditCard = "786989123789546", Email = "Liyrest@example.com", PhoneNumber = "9879986123", CustomerId = 3 });
         });
 
         modelBuilder.Entity<ShoppingCart>(entity =>
@@ -110,7 +114,7 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(8,2)");
             entity.Property(e => e.CartId).HasColumnType("int");
             entity.Property(e =>e.ProductId).HasColumnType("int");
-            entity.HasOne(p => p.Product).WithMany(c => CartItems).HasForeignKey(p => p.ProductId);
+            entity.HasOne(p => p.Product);
 
         });
 
@@ -126,6 +130,8 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.Total).HasColumnType("numeric(10,2)");
             entity.Property(e => e.taxes).HasColumnType("numeric(8,2)");
             entity.HasOne(e => e.Customer).WithMany(c => c.Orders).HasForeignKey(p => p.CustomerId);
+
+            entity.HasData(new Order { CustomerId = 1, OrderId = 1, DateCreated = new DateOnly(2026, 06, 03), DateFulfilled = new DateOnly(2026, 06, 16), taxes=10, Total=100});
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
@@ -140,7 +146,11 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(8,2)");
 
             entity.HasOne(p => p.Product);
-            entity.HasOne(p => p.Order).WithMany(o => o.OrderItems).HasForeignKey(p => p.ProductId);
+            entity.HasOne(p => p.Order).WithMany(o => o.OrderItems).HasForeignKey(p => p.OrderId);
+
+            entity.HasData(new OrderItem { OrderItemId = 1, ProductId = 1, OrderId = 1, Price = 1, Quantity = 1 },
+                new OrderItem { OrderItemId = 2, ProductId = 1, OrderId = 1, Price = 1, Quantity = 1 },
+                new OrderItem { OrderItemId = 3, ProductId = 1, OrderId = 1, Price = 1, Quantity = 1 });
         });
 
         OnModelCreatingPartial(modelBuilder);

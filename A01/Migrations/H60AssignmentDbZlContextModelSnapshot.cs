@@ -22,6 +22,219 @@ namespace A01.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("A01.Models.CartItem", b =>
+                {
+                    b.Property<int>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric(8,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ShoppingCartCartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartCartId");
+
+                    b.ToTable("CartItem", (string)null);
+                });
+
+            modelBuilder.Entity("A01.Models.Customer", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("CreditCard")
+                        .HasColumnType("varchar(16)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Firstname")
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Lastname")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("varchar(2)");
+
+                    b.HasKey("CustomerId");
+
+                    b.HasIndex(new[] { "CustomerId" }, "X_Customer_CustomerId");
+
+                    b.ToTable("Customer", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = 1,
+                            CreditCard = "456789123789546",
+                            Email = "example@example.com",
+                            Firstname = "Cassius",
+                            Lastname = "Bright",
+                            PhoneNumber = "9874566123"
+                        },
+                        new
+                        {
+                            CustomerId = 2,
+                            CreditCard = "456989123789546",
+                            Email = "letme@example.com",
+                            Firstname = "Guy",
+                            Lastname = "Ofsomekind",
+                            PhoneNumber = "9874786123"
+                        },
+                        new
+                        {
+                            CustomerId = 3,
+                            CreditCard = "786989123789546",
+                            Email = "Liyrest@example.com",
+                            Firstname = "Olivier",
+                            Lastname = "Laurence",
+                            PhoneNumber = "9879986123"
+                        });
+                });
+
+            modelBuilder.Entity("A01.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("DateCreated")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("DateFulfilled")
+                        .HasColumnType("date");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("numeric(10,2)");
+
+                    b.Property<decimal>("taxes")
+                        .HasColumnType("numeric(8,2)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Order", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = 1,
+                            CustomerId = 1,
+                            DateCreated = new DateOnly(2026, 6, 3),
+                            DateFulfilled = new DateOnly(2026, 6, 16),
+                            Total = 100m,
+                            taxes = 10m
+                        });
+                });
+
+            modelBuilder.Entity("A01.Models.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric(8,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItem", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            OrderItemId = 1,
+                            OrderId = 1,
+                            Price = 1m,
+                            ProductId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            OrderItemId = 2,
+                            OrderId = 1,
+                            Price = 1m,
+                            ProductId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            OrderItemId = 3,
+                            OrderId = 1,
+                            Price = 1m,
+                            ProductId = 1,
+                            Quantity = 1
+                        });
+                });
+
+            modelBuilder.Entity("A01.Models.ShoppingCart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("DateCreated")
+                        .HasColumnType("date");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("ShoppingCart", (string)null);
+                });
+
             modelBuilder.Entity("A01.models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -80,6 +293,62 @@ namespace A01.Migrations
                     b.ToTable("ProductCategory", (string)null);
                 });
 
+            modelBuilder.Entity("A01.Models.CartItem", b =>
+                {
+                    b.HasOne("A01.models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("A01.Models.ShoppingCart", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ShoppingCartCartId");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("A01.Models.Order", b =>
+                {
+                    b.HasOne("A01.Models.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("A01.Models.OrderItem", b =>
+                {
+                    b.HasOne("A01.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("A01.models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("A01.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("A01.Models.Customer", "Customer")
+                        .WithOne("ShoppingCart")
+                        .HasForeignKey("A01.Models.ShoppingCart", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("A01.models.Product", b =>
                 {
                     b.HasOne("A01.models.ProductCategory", "ProdCat")
@@ -89,6 +358,23 @@ namespace A01.Migrations
                         .HasConstraintName("FK_Product_ProductCategory");
 
                     b.Navigation("ProdCat");
+                });
+
+            modelBuilder.Entity("A01.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("ShoppingCart");
+                });
+
+            modelBuilder.Entity("A01.Models.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("A01.Models.ShoppingCart", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("A01.models.ProductCategory", b =>
