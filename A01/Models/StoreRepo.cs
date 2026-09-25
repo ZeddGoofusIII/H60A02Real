@@ -40,7 +40,7 @@ namespace A01.Models
 
         public IEnumerable<ProductCategory> GetCategories()
         {
-            var categories = _context.ProductCategories.ToList();
+            var categories = _context.ProductCategories.OrderBy(p => p.ProdCat).ToList();
             return categories;
         }
 
@@ -56,7 +56,7 @@ namespace A01.Models
 
         public IEnumerable<Product> GetProducts()
         {
-            return _context.Products.Include(p => p.ProdCat).ToList();
+            return _context.Products.OrderBy(p => p.ProdCat.ProdCat).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
         }
 
         public bool InsertProduct(Product product)
@@ -125,7 +125,7 @@ namespace A01.Models
 
         public IEnumerable<Product> ProductsByCategory(int categoryId)
         {
-            return _context.Products.Where(p => p.ProductCategoryId == categoryId).Include(p => p.ProdCat).ToList();
+            return _context.Products.Where(p => p.ProductCategoryId == categoryId).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
         }
     }
     }
