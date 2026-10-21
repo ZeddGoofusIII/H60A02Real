@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using A01.models;
 using A01.Models;
 using A01.Services;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize(Roles = "Manager, Clerk")]
 public class ProductsController : Controller
 {
     private readonly H60AssignmentDbZlContext _context;
@@ -120,6 +122,7 @@ public class ProductsController : Controller
 
 
     [Route("Products/EditPrice/{productid}")]
+    [Authorize("Manager")]
     public IActionResult EditPrice(int productid)
     {
         var prod = _repo.GetProductById(productid);
@@ -134,6 +137,7 @@ public class ProductsController : Controller
 
     [HttpPost]
     [Route("Products/EditPrice/{productid}")]
+    [Authorize("Authorize")]
     public IActionResult EditPrice(PriceHelper helper)
     {
         try

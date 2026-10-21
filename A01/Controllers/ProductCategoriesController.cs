@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using A01.models;
 using A01.Models;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize(Roles = "Manager, Clerk")]
 public class ProductCategoriesController : Controller
 {
     private readonly IStoreRepo _repo;
