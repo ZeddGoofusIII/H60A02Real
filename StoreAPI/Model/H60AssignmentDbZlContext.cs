@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using A01.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace A01.models;
+namespace StoreAPI.Model;
 
 public partial class H60AssignmentDbZlContext : DbContext
 {

@@ -1,6 +1,6 @@
-﻿using A01.models;
+﻿using StoreAPI.Model;
 
-namespace A01.Models
+namespace StoreAPI.Model
 {
     public class CartItem
     {

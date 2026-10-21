@@ -1,7 +1,7 @@
-﻿using A01.models;
-using A01.Services;
+﻿using StoreAPI.Model;
+using StoreAPI.Services;
 
-namespace A01.Models
+namespace StoreAPI.Model
 {
     public interface IStoreRepo
     {

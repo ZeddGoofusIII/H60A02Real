@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace A01.models;
-
+namespace StoreAPI.Model;
 public partial class ProductCategory
 {
     public int ProductCategoryId { get; set; }

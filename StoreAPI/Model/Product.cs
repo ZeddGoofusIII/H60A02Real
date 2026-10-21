@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace A01.models;
+namespace StoreAPI.Model;
 
 public partial class Product
 {
