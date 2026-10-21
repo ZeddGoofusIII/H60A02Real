@@ -1,5 +1,4 @@
 ﻿namespace StoreAPI.Model;
-using A01.models;
 
 public class OrderItem
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using A01.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace StoreAPI.Model;

@@ -21,14 +21,4 @@ public class Validation
             throw new ArgumentException("Prices can not be negative");
         }
     }
-
-    public static void ValidateStock(int newStock, global::StoreAPI.Model.Product product)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static void ValidateStock(int newStock, global::StoreAPI.Model.Product product)
-    {
-        throw new NotImplementedException();
-    }
 }

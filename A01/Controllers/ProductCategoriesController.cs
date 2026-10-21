@@ -21,6 +21,7 @@ public class ProductCategoriesController : Controller
 
     // GET: PRODUCTCATEGORYS/Details/5
     [Route("productCategories/Details/{productcategoryid}")]
+    [HttpGet]
     public IActionResult Details(int? productcategoryid)
     {
         if (productcategoryid == null)
