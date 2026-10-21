@@ -1,5 +1,6 @@
-﻿using StoreAPI.Model;
+﻿using A01.models;
 using Microsoft.EntityFrameworkCore;
+using StoreAPI.Model;
 using StoreAPI.Services;
 namespace StoreAPI.Model;
 
@@ -84,25 +85,6 @@ public class StoreRepo : IStoreRepo
         save();
     }
 
-
-    public void UpdateStock(int productId, int newStock, Product product1)
-    {
-        var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
-        if (product != null)
-        {
-            try
-            {
-                Validation.ValidateStock(newStock, product1);
-                product.Stock += newStock;
-                save();
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
-        }
-    }
-
     public void UpdatePrice(PriceHelper helper)
     {
         var product = _context.Products.FirstOrDefault(p => p.ProductId == helper.ProdId);
@@ -128,9 +110,22 @@ public class StoreRepo : IStoreRepo
         return _context.Products.Where(p => p.ProductCategoryId == categoryId).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
     }
 
-    public void UpdateStock(int productid, int stockChange)
+    public void UpdateStock(int productId, int stockChange)
     {
-        throw new NotImplementedException();
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+        if (product != null)
+        {
+            try
+            {
+                Validation.ValidateStock(stockChange, product);
+                product.Stock += stockChange;
+                save();
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
     }
 }
 
