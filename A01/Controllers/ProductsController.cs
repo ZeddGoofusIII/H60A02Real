@@ -5,23 +5,27 @@ using A01.models;
 using A01.Models;
 using A01.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 [Authorize(Roles = "Manager, Clerk")]
 public class ProductsController : Controller
 {
-    private readonly H60AssignmentDbZlContext _context;
-    private readonly IStoreRepo _repo;
-
-    public ProductsController(H60AssignmentDbZlContext context, IStoreRepo repo)
+  
+    private readonly HttpClient _httpClient;
+    public ProductsController( HttpClient httpClient)
     {
-        _context = context;
-        _repo = repo;
+        _httpClient = httpClient;
     }
 
     // GET: PRODUCTS
     public IActionResult Index()    
     {
-        return View(_repo.GetProducts());
+        string endpoint = "https://localhost:7240/api/Products";
+
+        var response = _httpClient.GetAsync(endpoint).Result;
+        List<Product> products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
+
+        return View(products);
     }
 
     // GET: PRODUCTS/Details/5
@@ -33,7 +37,11 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-        var product = _repo.GetProductById(productid.Value);
+        string endpoint = $"https://localhost:7240/api/Products/{productid.Value}";
+
+        var response = _httpClient.GetAsync(endpoint).Result;
+
+        Product product = JsonSerializer.Deserialize<Product>(response.Content.ReadAsStringAsync().Result);
 
         return View(product);
 
@@ -49,16 +57,19 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Product product)
     {
-        var cat = _repo.GetCategoryById(product.ProductCategoryId);
-        product.ProdCat = cat;
-        if (ModelState.IsValid)
+        string endpoint = "https://localhost:7240/api/Products";
+
+        var response = await _httpClient.PostAsJsonAsync(endpoint, product);
+
+        if (response.IsSuccessStatusCode)
         {
-
-            _repo.InsertProduct(product);
-
             return RedirectToAction(nameof(Index));
         }
-        return View(product);
+        else
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the product.");
+            return View(product);
+        }
     }
 
     
@@ -72,7 +83,12 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-        var product = _repo.GetProductById(productid.Value);
+        string endpoint = $"https://localhost:7240/api/Products/{productid.Value}";
+
+        var response = _httpClient.GetAsync(endpoint).Result;
+
+        Product product = JsonSerializer.Deserialize<Product>(response.Content.ReadAsStringAsync().Result);
+
         if (product == null)
         {
             return NotFound();
@@ -86,11 +102,15 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int? productid)
     {
-        var product =  _repo.GetProductById(productid.Value);
-        if (product != null)
+        string endpoint = $"https://localhost:7240/api/Products/{productid.Value}";
+
+        var response = _httpClient.DeleteAsync(endpoint).Result;
+
+        if(!response.IsSuccessStatusCode)
         {
-            _context.Products.Remove(product);
-        }
+            ModelState.AddModelError(string.Empty, "An error occurred while deleting the product.");
+            return View();
+        }   
         return RedirectToAction(nameof(Index));
     }
 
@@ -106,18 +126,9 @@ public class ProductsController : Controller
     [Route("Products/UpdateStock/{productid}")]
     public IActionResult UpdateStock(StockHelper helper)
     {
-        try
-        {
-            _repo.UpdateStock(helper.Prodid, helper.StockChange);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            ModelState.AddModelError("StockChange", ex.Message);
-            return View(helper);
-        }
-        
-        
+        string endpoint = $"https://localhost:7240/api/Products/Stockchange/{helper.Prodid}";
+
+        var ressponse 
     }
 
 
