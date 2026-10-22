@@ -129,6 +129,12 @@ public class ProductsController : Controller
         string endpoint = $"https://localhost:7240/api/Products/Stockchange/{helper.Prodid}";
 
         var response = _httpClient.PutAsJsonAsync(endpoint, helper.StockChange).Result;
+
+        if (!response.IsSuccessStatusCode)
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while updating the stock.");
+            return View(helper);
+        }   return RedirectToAction(nameof(Index));
     }
 
 
@@ -136,7 +142,12 @@ public class ProductsController : Controller
     [Authorize("Manager")]
     public IActionResult EditPrice(int productid)
     {
-        var prod = _repo.GetProductById(productid);
+        string endpoint = $"https://localhost:7240/api/Products/{productid}";
+
+        var response = _httpClient.GetAsync(endpoint).Result;
+
+        Product prod = JsonSerializer.Deserialize<Product>(response.Content.ReadAsStringAsync().Result);
+
         var helper = new PriceHelper()
         {
             ProdId = productid,
@@ -153,7 +164,16 @@ public class ProductsController : Controller
     {
         try
         {
-            _repo.UpdatePrice(helper);
+            string endpoint = $"https://localhost:7240/api/Products/Pricechange/{helper.ProdId}";
+
+            var response = _httpClient.PutAsJsonAsync(endpoint, helper).Result;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the price.");
+                return View(helper);
+            }
+
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
@@ -165,7 +185,7 @@ public class ProductsController : Controller
 
     private bool ProductExists(int? productid)
     {
-        return _context.Products.Any(e => e.ProductId == productid);
+        return true;
     }
 
 
