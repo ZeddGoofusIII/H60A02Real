@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<H60AssignmentDbZlContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
+builder.Services.AddScoped<IStoreRepo, StoreRepo>();
 
 var app = builder.Build();
 

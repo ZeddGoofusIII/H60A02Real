@@ -5,11 +5,11 @@ namespace StoreAPI.Model
 {
     public interface IStoreRepo
     {
-        IEnumerable<Product> GetProducts();
+        Task<List<Product>> GetProducts();
 
-        IEnumerable<ProductCategory> GetCategories();
+        Task<List<ProductCategory>> GetCategories();
 
-        bool InsertProduct(Product product);
+        Task<bool> InsertProduct(Product product);
 
         void UpdateProduct(Product product);
 
@@ -21,15 +21,15 @@ namespace StoreAPI.Model
 
         void addCategory(ProductCategory category);
 
-        Product GetProductById(int? productId);
+        Task<Product> GetProductById(int? productId);
 
-        ProductCategory GetCategoryById(int? categoryId);
+        Task<ProductCategory> GetCategoryById(int? categoryId);
 
         void UpdateStock(int productid, int stockChange );
 
         void UpdatePrice(PriceHelper helper);
         void save();
 
-        IEnumerable<Product> ProductsByCategory(int  categoryId);
+        Task<List<Product>> ProductsByCategory(int  categoryId);
     }
 }

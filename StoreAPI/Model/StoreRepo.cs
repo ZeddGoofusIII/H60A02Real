@@ -36,28 +36,7 @@ public class StoreRepo : IStoreRepo
         {
             _context.Products.Remove(product);
         }
-        save() ;
-    }
-
-    public IEnumerable<ProductCategory> GetCategories()
-    {
-        var categories = _context.ProductCategories.OrderBy(p => p.ProdCat).ToList();
-        return categories;
-    }
-
-    public ProductCategory GetCategoryById(int? ProductCategoryId)
-    {
-        return _context.ProductCategories.Where(x => x.ProductCategoryId == ProductCategoryId).FirstOrDefault();
-    }
-
-    public Product GetProductById(int? productId)
-    {
-        return _context.Products.Where(x => x.ProductId == productId).FirstOrDefault();
-    }
-
-    public IEnumerable<Product> GetProducts()
-    {
-        return _context.Products.OrderBy(p => p.ProdCat.ProdCat).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
+        save();
     }
 
     public bool InsertProduct(Product product)
@@ -105,11 +84,6 @@ public class StoreRepo : IStoreRepo
         }
     }
 
-    public IEnumerable<Product> ProductsByCategory(int categoryId)
-    {
-        return _context.Products.Where(p => p.ProductCategoryId == categoryId).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
-    }
-
     public void UpdateStock(int productId, int stockChange)
     {
         var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
@@ -126,6 +100,36 @@ public class StoreRepo : IStoreRepo
                 throw new ArgumentException(ex.Message);
             }
         }
+    }
+
+    Task<List<ProductCategory>> IStoreRepo.GetCategories()
+    {
+        return Task.FromResult(_context.ProductCategories.ToList());
+    }
+
+    Task<bool> IStoreRepo.InsertProduct(Product product)
+    {
+        return Task.FromResult(InsertProduct(product));
+    }
+
+    Task<Product> IStoreRepo.GetProductById(int? productId)
+    {
+        return Task.FromResult(_context.Products.Include(p => p.ProdCat).FirstOrDefault(x => x.ProductId == productId));
+    }
+
+    Task<ProductCategory> IStoreRepo.GetCategoryById(int? categoryId)
+    {
+        return Task.FromResult(_context.ProductCategories.FirstOrDefault(x => x.ProductCategoryId == categoryId));
+    }
+
+    Task<List<Product>> IStoreRepo.ProductsByCategory(int categoryId)
+    {
+        return Task.FromResult(_context.Products.Where(p => p.ProductCategoryId == categoryId).Include(p => p.ProdCat).ToList());
+    }
+
+    Task<List<Product>> IStoreRepo.GetProducts()
+    {
+        return Task.FromResult(_context.Products.Include(p => p.ProdCat).OrderBy(p => p.ProdCat.ProdCat).ToList());
     }
 }
 
