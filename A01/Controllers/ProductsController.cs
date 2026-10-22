@@ -128,7 +128,7 @@ public class ProductsController : Controller
     {
         string endpoint = $"https://localhost:7240/api/Products/Stockchange/{helper.Prodid}";
 
-        var ressponse 
+        var response = _httpClient.PutAsJsonAsync(endpoint, helper.StockChange).Result;
     }
 
 

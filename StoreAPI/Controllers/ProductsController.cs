@@ -58,14 +58,14 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("Stockchange/{id}")]
+    [HttpPut("Stockchange/{id}")]
     public IActionResult UpdateStock(int id, int stockChange)
     {
         _storeRepo.UpdateStock(id, stockChange);
         return NoContent();
     }
 
-    [HttpPost("Pricechange/{id}")]
+    [HttpPut("Pricechange/{id}")]
     public IActionResult UpdatePrice(int id, PriceHelper priceChange)
     {
         _storeRepo.UpdatePrice(priceChange);
