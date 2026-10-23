@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace A01.Migrations
 {
     [DbContext(typeof(H60AssignmentDbZlContext))]
-    [Migration("20260923192229_populate-Order-table")]
-    partial class populateOrdertable
+    [Migration("20261023192939_changeproct")]
+    partial class changeproct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.31")
+                .HasAnnotation("ProductVersion", "8.0.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -243,37 +243,53 @@ namespace A01.Migrations
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ProductID");
+                        .HasColumnName("ProductID")
+                        .HasAnnotation("Relational:JsonPropertyName", "productId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<decimal?>("BuyPrice")
-                        .HasColumnType("numeric(8, 2)");
+                        .HasColumnType("numeric(8, 2)")
+                        .HasAnnotation("Relational:JsonPropertyName", "buyPrice");
 
                     b.Property<string>("Description")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("varchar(80)")
+                        .HasAnnotation("Relational:JsonPropertyName", "description");
 
                     b.Property<string>("Manufacturer")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("varchar(80)")
+                        .HasAnnotation("Relational:JsonPropertyName", "manufacturer");
+
+                    b.Property<string>("ProdCat")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(60)")
+                        .HasAnnotation("Relational:JsonPropertyName", "prodCat");
 
                     b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "productCategoryId");
 
                     b.Property<decimal?>("SellPrice")
-                        .HasColumnType("numeric(8, 2)");
+                        .HasColumnType("numeric(8, 2)")
+                        .HasAnnotation("Relational:JsonPropertyName", "sellPrice");
 
                     b.Property<int>("Stock")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "stock");
 
                     b.HasKey("ProductId");
 
                     b.HasIndex(new[] { "ProductCategoryId" }, "IX_Product_ProductCategoryId");
 
                     b.ToTable("Product", (string)null);
+
+                    b.HasAnnotation("Relational:JsonPropertyName", "products");
                 });
 
             modelBuilder.Entity("A01.models.ProductCategory", b =>
@@ -281,7 +297,8 @@ namespace A01.Migrations
                     b.Property<int>("ProductCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ProductCategoryId");
+                        .HasColumnName("ProductCategoryId")
+                        .HasAnnotation("Relational:JsonPropertyName", "productCategoryId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductCategoryId"));
 
@@ -289,7 +306,8 @@ namespace A01.Migrations
                         .IsRequired()
                         .HasMaxLength(60)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(60)")
+                        .HasAnnotation("Relational:JsonPropertyName", "prodCat");
 
                     b.HasKey("ProductCategoryId");
 
@@ -354,13 +372,11 @@ namespace A01.Migrations
 
             modelBuilder.Entity("A01.models.Product", b =>
                 {
-                    b.HasOne("A01.models.ProductCategory", "ProdCat")
+                    b.HasOne("A01.models.ProductCategory", null)
                         .WithMany("Products")
                         .HasForeignKey("ProductCategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Product_ProductCategory");
-
-                    b.Navigation("ProdCat");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("A01.Models.Customer", b =>

@@ -51,11 +51,10 @@ public partial class H60AssignmentDbZlContext : DbContext
                 .HasMaxLength(80)
                 .IsUnicode(false);
             entity.Property(e => e.SellPrice).HasColumnType("numeric(8, 2)");
+            entity.Property(e => e.ProdCat)
+                .HasMaxLength(60)
+                .IsUnicode(false);
 
-            entity.HasOne(d => d.ProdCat).WithMany(p => p.Products)
-                .HasForeignKey(d => d.ProductCategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Product_ProductCategory");
         });
 
         modelBuilder.Entity<ProductCategory>(entity =>

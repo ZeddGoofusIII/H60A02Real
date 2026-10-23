@@ -129,7 +129,7 @@ public class StoreRepo : IStoreRepo
 
     Task<List<Product>> IStoreRepo.GetProducts()
     {
-        return Task.FromResult(_context.Products.Include(p => p.ProdCat).OrderBy(p => p.ProdCat.ProdCat).ToList());
+        return Task.FromResult(_context.Products.OrderBy(p => p.ProdCat).ToList());
     }
 }
 

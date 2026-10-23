@@ -20,7 +20,7 @@ public partial class Product
 
     public decimal? SellPrice { get; set; }
 
-    public virtual ProductCategory? ProdCat { get; set; } = null!;
+    public string? ProdCat { get; set; } = null!;
 
     public Product(int productId)
     {

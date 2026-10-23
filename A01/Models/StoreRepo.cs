@@ -56,7 +56,7 @@ namespace A01.Models
 
         public IEnumerable<Product> GetProducts()
         {
-            return _context.Products.OrderBy(p => p.ProdCat.ProdCat).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
+            return _context.Products.OrderBy(p => p.ProdCat).OrderBy(p => p.Description).Include(p => p.ProdCat).ToList();
         }
 
         public bool InsertProduct(Product product)

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace A01.Migrations
 {
     [DbContext(typeof(H60AssignmentDbZlContext))]
-    [Migration("20260923130341_add-customertables")]
-    partial class addcustomertables
+    [Migration("20261023192739_Microsoft.EntityFrameworkCore.SqlServer")]
+    partial class MicrosoftEntityFrameworkCoreSqlServer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.31")
+                .HasAnnotation("ProductVersion", "8.0.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -89,6 +89,35 @@ namespace A01.Migrations
                     b.HasIndex(new[] { "CustomerId" }, "X_Customer_CustomerId");
 
                     b.ToTable("Customer", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = 1,
+                            CreditCard = "456789123789546",
+                            Email = "example@example.com",
+                            Firstname = "Cassius",
+                            Lastname = "Bright",
+                            PhoneNumber = "9874566123"
+                        },
+                        new
+                        {
+                            CustomerId = 2,
+                            CreditCard = "456989123789546",
+                            Email = "letme@example.com",
+                            Firstname = "Guy",
+                            Lastname = "Ofsomekind",
+                            PhoneNumber = "9874786123"
+                        },
+                        new
+                        {
+                            CustomerId = 3,
+                            CreditCard = "786989123789546",
+                            Email = "Liyrest@example.com",
+                            Firstname = "Olivier",
+                            Lastname = "Laurence",
+                            PhoneNumber = "9879986123"
+                        });
                 });
 
             modelBuilder.Entity("A01.Models.Order", b =>
@@ -119,6 +148,17 @@ namespace A01.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Order", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = 1,
+                            CustomerId = 1,
+                            DateCreated = new DateOnly(2026, 6, 3),
+                            DateFulfilled = new DateOnly(2026, 6, 16),
+                            Total = 100m,
+                            taxes = 10m
+                        });
                 });
 
             modelBuilder.Entity("A01.Models.OrderItem", b =>
@@ -138,19 +178,42 @@ namespace A01.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("OrderItemId");
 
+                    b.HasIndex("OrderId");
+
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId1");
-
                     b.ToTable("OrderItem", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            OrderItemId = 1,
+                            OrderId = 1,
+                            Price = 1m,
+                            ProductId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            OrderItemId = 2,
+                            OrderId = 1,
+                            Price = 1m,
+                            ProductId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            OrderItemId = 3,
+                            OrderId = 1,
+                            Price = 1m,
+                            ProductId = 1,
+                            Quantity = 1
+                        });
                 });
 
             modelBuilder.Entity("A01.Models.ShoppingCart", b =>
@@ -180,37 +243,51 @@ namespace A01.Migrations
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ProductID");
+                        .HasColumnName("ProductID")
+                        .HasAnnotation("Relational:JsonPropertyName", "productId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<decimal?>("BuyPrice")
-                        .HasColumnType("numeric(8, 2)");
+                        .HasColumnType("numeric(8, 2)")
+                        .HasAnnotation("Relational:JsonPropertyName", "buyPrice");
 
                     b.Property<string>("Description")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("varchar(80)")
+                        .HasAnnotation("Relational:JsonPropertyName", "description");
 
                     b.Property<string>("Manufacturer")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("varchar(80)")
+                        .HasAnnotation("Relational:JsonPropertyName", "manufacturer");
+
+                    b.Property<string>("ProdCat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasAnnotation("Relational:JsonPropertyName", "prodCat");
 
                     b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "productCategoryId");
 
                     b.Property<decimal?>("SellPrice")
-                        .HasColumnType("numeric(8, 2)");
+                        .HasColumnType("numeric(8, 2)")
+                        .HasAnnotation("Relational:JsonPropertyName", "sellPrice");
 
                     b.Property<int>("Stock")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "stock");
 
                     b.HasKey("ProductId");
 
                     b.HasIndex(new[] { "ProductCategoryId" }, "IX_Product_ProductCategoryId");
 
                     b.ToTable("Product", (string)null);
+
+                    b.HasAnnotation("Relational:JsonPropertyName", "products");
                 });
 
             modelBuilder.Entity("A01.models.ProductCategory", b =>
@@ -218,7 +295,8 @@ namespace A01.Migrations
                     b.Property<int>("ProductCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ProductCategoryId");
+                        .HasColumnName("ProductCategoryId")
+                        .HasAnnotation("Relational:JsonPropertyName", "productCategoryId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductCategoryId"));
 
@@ -226,7 +304,8 @@ namespace A01.Migrations
                         .IsRequired()
                         .HasMaxLength(60)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(60)")
+                        .HasAnnotation("Relational:JsonPropertyName", "prodCat");
 
                     b.HasKey("ProductCategoryId");
 
@@ -263,13 +342,13 @@ namespace A01.Migrations
                 {
                     b.HasOne("A01.Models.Order", "Order")
                         .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("A01.models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -291,13 +370,11 @@ namespace A01.Migrations
 
             modelBuilder.Entity("A01.models.Product", b =>
                 {
-                    b.HasOne("A01.models.ProductCategory", "ProdCat")
+                    b.HasOne("A01.models.ProductCategory", null)
                         .WithMany("Products")
                         .HasForeignKey("ProductCategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Product_ProductCategory");
-
-                    b.Navigation("ProdCat");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("A01.Models.Customer", b =>

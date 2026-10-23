@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
 namespace A01.models;
 
 public partial class Product
 {
+    [JsonPropertyName("productId")]
     public int ProductId { get; set; }
-
+    [JsonPropertyName("productCategoryId")]
     public int ProductCategoryId { get; set; }
-
+    [JsonPropertyName("description")]
     public string? Description { get; set; }
-
+    [JsonPropertyName("manufacturer")]
     public string? Manufacturer { get; set; }
-
+    [JsonPropertyName("stock")]
     public int Stock { get; set; }
-
+    [JsonPropertyName("buyPrice")]
     public decimal? BuyPrice { get; set; }
-
+    [JsonPropertyName("sellPrice")]
     public decimal? SellPrice { get; set; }
-
-    public virtual ProductCategory? ProdCat { get; set; } = null!;
+    [JsonPropertyName("prodCat")]
+    public string ProdCat { get; set; } = null!;
 
     public Product(int productId)
     {

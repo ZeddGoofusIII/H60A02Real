@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace A01.Migrations
 {
     /// <inheritdoc />
-    public partial class addcustomertables : Migration
+    public partial class MicrosoftEntityFrameworkCoreSqlServer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,6 +29,19 @@ namespace A01.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.CustomerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCategory",
+                columns: table => new
+                {
+                    ProductCategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProdCat = table.Column<string>(type: "varchar(60)", unicode: false, maxLength: 60, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCategory", x => x.ProductCategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,31 +88,27 @@ namespace A01.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItem",
+                name: "Product",
                 columns: table => new
                 {
-                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                    ProductID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(8,2)", nullable: false),
-                    ProductId1 = table.Column<int>(type: "int", nullable: false)
+                    ProductCategoryId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(80)", unicode: false, maxLength: 80, nullable: true),
+                    Manufacturer = table.Column<string>(type: "varchar(80)", unicode: false, maxLength: 80, nullable: true),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    BuyPrice = table.Column<decimal>(type: "numeric(8,2)", nullable: true),
+                    SellPrice = table.Column<decimal>(type: "numeric(8,2)", nullable: true),
+                    ProdCat = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItem", x => x.OrderItemId);
+                    table.PrimaryKey("PK_Product", x => x.ProductID);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Order_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Order",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItem_Product_ProductId1",
-                        column: x => x.ProductId1,
-                        principalTable: "Product",
-                        principalColumn: "ProductID",
+                        name: "FK_Product_ProductCategory_ProductCategoryId",
+                        column: x => x.ProductCategoryId,
+                        principalTable: "ProductCategory",
+                        principalColumn: "ProductCategoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -129,6 +140,59 @@ namespace A01.Migrations
                         principalColumn: "CartId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItem",
+                columns: table => new
+                {
+                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(8,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItem", x => x.OrderItemId);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Customer",
+                columns: new[] { "CustomerId", "CreditCard", "Email", "Firstname", "Lastname", "PhoneNumber", "Province" },
+                values: new object[,]
+                {
+                    { 1, "456789123789546", "example@example.com", "Cassius", "Bright", "9874566123", null },
+                    { 2, "456989123789546", "letme@example.com", "Guy", "Ofsomekind", "9874786123", null },
+                    { 3, "786989123789546", "Liyrest@example.com", "Olivier", "Laurence", "9879986123", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Order",
+                columns: new[] { "OrderId", "CustomerId", "DateCreated", "DateFulfilled", "Total", "taxes" },
+                values: new object[] { 1, 1, new DateOnly(2026, 6, 3), new DateOnly(2026, 6, 16), 100m, 10m });
+
+            migrationBuilder.InsertData(
+                table: "OrderItem",
+                columns: new[] { "OrderItemId", "OrderId", "Price", "ProductId", "Quantity" },
+                values: new object[,]
+                {
+                    { 1, 1, 1m, 1, 1 },
+                    { 2, 1, 1m, 1, 1 },
+                    { 3, 1, 1m, 1, 1 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CartItem_ProductId",
                 table: "CartItem",
@@ -150,14 +214,19 @@ namespace A01.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_OrderId",
+                table: "OrderItem",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_ProductId",
                 table: "OrderItem",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_ProductId1",
-                table: "OrderItem",
-                column: "ProductId1");
+                name: "IX_Product_ProductCategoryId",
+                table: "Product",
+                column: "ProductCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCart_CustomerId",
@@ -182,7 +251,13 @@ namespace A01.Migrations
                 name: "Order");
 
             migrationBuilder.DropTable(
+                name: "Product");
+
+            migrationBuilder.DropTable(
                 name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "ProductCategory");
         }
     }
 }
