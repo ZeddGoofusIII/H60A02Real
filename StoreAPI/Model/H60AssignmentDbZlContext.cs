@@ -79,10 +79,11 @@ public partial class H60AssignmentDbZlContext : DbContext
             entity.Property(e => e.PhoneNumber).HasColumnType("varchar(10)");
             entity.Property(e => e.Province).HasColumnType("varchar(2)");
             entity.Property(e => e.CreditCard).HasColumnType("varchar(16)");
+            entity.Property(e => e.IdCode).HasColumnType("varchar(50)");
 
-            entity.HasData(new Customer { Firstname = "Cassius", Lastname = "Bright", CreditCard = "456789123789546", Email="example@example.com", PhoneNumber="9874566123", CustomerId = 1 },
-                new Customer { Firstname = "Guy", Lastname = "Ofsomekind", CreditCard = "456989123789546", Email = "letme@example.com", PhoneNumber = "9874786123", CustomerId = 2 },
-                new Customer { Firstname = "Olivier", Lastname = "Laurence", CreditCard = "786989123789546", Email = "Liyrest@example.com", PhoneNumber = "9879986123", CustomerId = 3 });
+            entity.HasData(new Customer { Firstname = "Cassius", Lastname = "Bright", CreditCard = "456789123789546", Email="example@example.com", PhoneNumber="9874566123", CustomerId = 1, IdCode = "7f6580af-9d88-4419-8b5e-6866f69e1f56" },
+                new Customer { Firstname = "Guy", Lastname = "Ofsomekind", CreditCard = "456989123789546", Email = "letme@example.com", PhoneNumber = "9874786123", CustomerId = 2, IdCode = "7f6580af-9d88-4419-8b5e-6866f69e1f56" },
+                new Customer { Firstname = "Olivier", Lastname = "Laurence", CreditCard = "786989123789546", Email = "Liyrest@example.com", PhoneNumber = "9879986123", CustomerId = 3, IdCode = "7f6580af-9d88-4419-8b5e-6866f69e1f56" });
         });
 
         modelBuilder.Entity<ShoppingCart>(entity =>

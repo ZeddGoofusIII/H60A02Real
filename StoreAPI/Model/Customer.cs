@@ -16,8 +16,31 @@
 
         public string? CreditCard {  get; set; }
 
-        public virtual IEnumerable<Order>? Orders { get; set; }
+        public string? IdCode { get; set; } = null!;
+
+        public virtual IEnumerable<Order>? Orders { get; set; } = null!;
 
         public virtual ShoppingCart? ShoppingCart { get; set; } = null!;
+
+        public Customer(int customerId)
+        {
+            CustomerId = customerId;
+        }
+
+        public Customer(int customerId, string? firstname, string? lastname, string? email, string? phoneNumber, string? province, string? creditCard, string? idCode)
+        {
+            CustomerId = customerId;
+            Firstname = firstname;
+            Lastname = lastname;
+            Email = email;
+            PhoneNumber = phoneNumber;
+            Province = province;
+            CreditCard = creditCard;
+            IdCode = idCode;
+        }
+
+        public Customer()
+        {
+        }
     }
 }

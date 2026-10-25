@@ -16,6 +16,8 @@
 
         public string? CreditCard {  get; set; }
 
+        public string? IdCode { get; set; } = null!;
+
         public virtual IEnumerable<Order>? Orders { get; set; }
 
         public virtual ShoppingCart? ShoppingCart { get; set; } = null!;
