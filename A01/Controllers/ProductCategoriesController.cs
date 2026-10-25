@@ -4,21 +4,25 @@ using Microsoft.EntityFrameworkCore;
 using A01.models;
 using A01.Models;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Text.Json;
 [Authorize(Roles = "Manager, Clerk")]
 public class ProductCategoriesController : Controller
 {
-    private readonly IStoreRepo _repo;
-
-    public ProductCategoriesController(IStoreRepo repo)
+    private readonly HttpClient _httpClient;
+    public ProductCategoriesController(HttpClient httpClient)
     {
-        _repo = repo;
+        _httpClient = httpClient;
     }
 
     // GET: PRODUCTCATEGORYS
     public IActionResult Index()    
     {
-        return View(_repo.GetCategories());
+        var endpoint = "https://localhost:44387/api/ProductCategory";
+
+        var response = _httpClient.GetAsync(endpoint).Result;
+
+        List<ProductCategory> productcategories = JsonSerializer.Deserialize<List<ProductCategory>>(response.Content.ReadAsStringAsync().Result);
+        return View(productcategories);
     }
 
     // GET: PRODUCTCATEGORYS/Details/5
@@ -26,17 +30,9 @@ public class ProductCategoriesController : Controller
     [HttpGet]
     public IActionResult Details(int? productcategoryid)
     {
-        if (productcategoryid == null)
-        {
-            return NotFound();
-        }
-
-        var productcategory = _repo.GetCategoryById(productcategoryid);
-        if (productcategory == null)
-        {
-            return NotFound();
-        }
-
+       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+        var response = _httpClient.GetAsync(endpoint).Result;
+        ProductCategory productcategory = JsonSerializer.Deserialize<ProductCategory>(response.Content.ReadAsStringAsync().Result);
         return View(productcategory);
     }
 
@@ -55,28 +51,18 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Create")]
     public async Task<IActionResult> Create([Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
     {
-        if (ModelState.IsValid)
-        {
-            _repo.addCategory(productcategory);
-            return RedirectToAction(nameof(Index));
-        }
-        return View(productcategory);
+        var endpoint = "https://localhost:44387/api/ProductCategory";
+        _httpClient.PostAsJsonAsync(endpoint, productcategory).Wait();
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: PRODUCTCATEGORYS/Edit/5
     [Route("ProductCategories/Edit/{productcategoryid}")]
     public async Task<IActionResult> Edit(int? productcategoryid)
     {
-        if (productcategoryid == null)
-        {
-            return NotFound();
-        }
-
-        var productcategory = _repo.GetCategoryById(productcategoryid);
-        if (productcategory == null)
-        {
-            return NotFound();
-        }
+        var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+        var response = _httpClient.GetAsync(endpoint).Result;
+        ProductCategory productcategory = JsonSerializer.Deserialize<ProductCategory>(response.Content.ReadAsStringAsync().Result);
         return View(productcategory);
     }
 
@@ -88,50 +74,18 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Edit/{productcategoryid}")]
     public async Task<IActionResult> Edit(int? productcategoryid, [Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
     {
-        if (productcategoryid != productcategory.ProductCategoryId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                _repo.UpdateCategory(productcategory);
-                
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductCategoryExists(productcategory.ProductCategoryId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(productcategory);
+       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+        _httpClient.PutAsJsonAsync(endpoint, productcategory).Wait();
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: PRODUCTCATEGORYS/Delete/5
     [Route("ProductCategories/Delete/{productid}")]
     public async Task<IActionResult> Delete(int? productcategoryid)
     {
-        if (productcategoryid == null)
-        {
-            return NotFound();
-        }
-
-        var productcategory =  _repo.GetCategoryById(productcategoryid);
-            
-        if (productcategory == null)
-        {
-            return NotFound();
-        }
-
+       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+        var response = _httpClient.GetAsync(endpoint).Result;
+        ProductCategory productcategory = JsonSerializer.Deserialize<ProductCategory>(response.Content.ReadAsStringAsync().Result);
         return View(productcategory);
     }
 
@@ -140,26 +94,20 @@ public class ProductCategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? productcategoryid)
     {
-        var productcategory = _repo.GetCategoryById(productcategoryid);
-        if (productcategory != null)
-        {
-            _repo.DeleteCategory(productcategory.ProductCategoryId);
-        }
-
+       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+        _httpClient.DeleteAsync(endpoint).Wait();
         return RedirectToAction(nameof(Index));
     }
 
     [Route("ProductCategories/ProductsInCategory/{Categoryid}")]
     public IActionResult ProductsInCategory(int Categoryid)
     {
-        var list = _repo.ProductsByCategory(Categoryid);
-
-        return View(list);
+        var endpoint = $"https://localhost:44387/api/ProductCategory/ProductsInCategory/{Categoryid}";
+        var response = _httpClient.GetAsync(endpoint).Result;
+        var products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
+        return View(products);
     }
 
 
-    private bool ProductCategoryExists(int? productcategoryid)
-    {
-        return _repo.GetCategoryById(productcategoryid) != null;
-    }
+  
 }

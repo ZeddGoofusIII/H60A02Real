@@ -31,5 +31,15 @@ namespace StoreAPI.Model
         void save();
 
         Task<List<Product>> ProductsByCategory(int  categoryId);
+
+        Task<List<Customer>> GetCustomers();
+
+        Task<Customer> GetCustomerById(int? customerId);
+        
+        public void UpdateCustomer(Customer customer);
+
+        public void DeleteCustomer(int customerId);
+
+        public void AddCustomer(Customer customer);
     }
 }

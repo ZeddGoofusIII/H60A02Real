@@ -131,6 +131,37 @@ public class StoreRepo : IStoreRepo
     {
         return Task.FromResult(_context.Products.OrderBy(p => p.ProdCat).ToList());
     }
+
+    Task<List<Customer>> IStoreRepo.GetCustomers()
+    {
+        return Task.FromResult(_context.Customers.ToList());
+    }
+
+    Task<Customer> IStoreRepo.GetCustomerById(int? customerId)
+    {
+        return Task.FromResult(_context.Customers.FirstOrDefault(x => x.CustomerId == customerId));
+    }
+
+    public void UpdateCustomer(Customer customer)
+    {
+        _context.Update(customer);
+    }
+
+    public void DeleteCustomer(int customerId)
+    {
+        var customer = _context.Customers.Include(c => c.ShoppingCart).FirstOrDefault(c => c.CustomerId == customerId);
+        if (customer != null && customer.ShoppingCart != null)
+        {
+            _context.Customers.Remove(customer);
+            save();
+        }
+    }
+
+    public void AddCustomer(Customer customer)
+    {
+        _context.Customers.Add(customer);
+        save();
+    }
 }
 
 
