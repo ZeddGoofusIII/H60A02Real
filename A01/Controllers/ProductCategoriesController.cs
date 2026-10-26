@@ -17,7 +17,7 @@ public class ProductCategoriesController : Controller
     // GET: PRODUCTCATEGORYS
     public IActionResult Index()    
     {
-        var endpoint = "https://localhost:44387/api/ProductCategory";
+        var endpoint = "http://localhost:44387/api/ProductCategory";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 

@@ -18,7 +18,7 @@ namespace A01.Controllers
         }
         public IActionResult Index()
         {
-            var endpoint = "https://localhost:44387/api/Customer";
+            var endpoint = "http://localhost:44387/api/Customer";
             var response = _httpClient.GetAsync(endpoint).Result;
             List<Customer> customers = JsonSerializer.Deserialize<List<Customer>>(response.Content.ReadAsStringAsync().Result);
             return View(customers);
@@ -28,7 +28,7 @@ namespace A01.Controllers
         [HttpGet]
         public IActionResult Details(int? customerid)
         {
-            var endpoint = $"https://localhost:44387/api/Customer/{customerid.Value}";
+            var endpoint = $"http://localhost:44387/api/Customer/{customerid.Value}";
             var response = _httpClient.GetAsync(endpoint).Result;
             Customer customer = JsonSerializer.Deserialize<Customer>(response.Content.ReadAsStringAsync().Result);
             return View(customer);
@@ -37,7 +37,7 @@ namespace A01.Controllers
         [Route("Edit/{customerid}")]
         public IActionResult Edit(int? customerid)
         {
-            var endpoint = $"https://localhost:44387/api/Customer/{customerid.Value}";
+            var endpoint = $"http://localhost:44387/api/Customer/{customerid.Value}";
             var response = _httpClient.GetAsync(endpoint).Result;
             Customer customer = JsonSerializer.Deserialize<Customer>(response.Content.ReadAsStringAsync().Result);
             return View(customer);
@@ -47,7 +47,7 @@ namespace A01.Controllers
         [HttpPost]
         public IActionResult Edit(Customer customer)
         {
-            var endpoint = $"https://localhost:44387/api/Customer/{customer.CustomerId}";
+            var endpoint = $"http://localhost:44387/api/Customer/{customer.CustomerId}";
             var response = _httpClient.PutAsJsonAsync(endpoint, customer).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -62,7 +62,7 @@ namespace A01.Controllers
         [Route("Delete/{customerid}")]
         public IActionResult Delete(int? customerid)
         {
-            var endpoint = $"https://localhost:44387/api/Customer/{customerid.Value}";
+            var endpoint = $"http://localhost:44387/api/Customer/{customerid.Value}";
             var response = _httpClient.DeleteAsync(endpoint).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -78,7 +78,7 @@ namespace A01.Controllers
         [HttpPost]
         public IActionResult DeleteConfirm(int? customerid)
         {
-            var endpoint = $"https://localhost:44387/api/Customer/{customerid.Value}";
+            var endpoint = $"http://localhost:44387/api/Customer/{customerid.Value}";
             var response = _httpClient.DeleteAsync(endpoint).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -100,7 +100,7 @@ namespace A01.Controllers
         [HttpPost]
         public IActionResult Create(Customer customer)
         {
-            var endpoint = $"https://localhost:44387/api/Customer";
+            var endpoint = $"http://localhost:44387/api/Customer";
             var response = _httpClient.PostAsJsonAsync(endpoint, customer).Result;
             if (response.IsSuccessStatusCode)
             {
