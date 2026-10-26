@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StoreAPI.Model;
 using StoreAPI.Services;
@@ -14,7 +15,7 @@ public class StoreRepo : IStoreRepo
         _context = context;
     } 
 
-    public void addCategory(ProductCategory category)
+    public void addCategory( ProductCategory category)
     {
         _context.Add(category);
         save();

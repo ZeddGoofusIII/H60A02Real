@@ -31,14 +31,14 @@ namespace StoreAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCategory(ProductCategory category)
+        public IActionResult CreateCategory([FromBody] ProductCategory category)
         {
             _storeRepo.addCategory(category);
             return CreatedAtAction(nameof(GetCategory), new { id = category.ProductCategoryId }, category);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, ProductCategory category)
+        public IActionResult UpdateCategory(int id,[FromBody] ProductCategory category)
         {
             category.ProductCategoryId = id;
             _storeRepo.UpdateCategory(category);

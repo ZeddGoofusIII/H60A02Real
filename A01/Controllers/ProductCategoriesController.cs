@@ -5,6 +5,7 @@ using A01.models;
 using A01.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
+using System.Text;
 [Authorize(Roles = "Manager, Clerk")]
 public class ProductCategoriesController : Controller
 {
@@ -49,15 +50,21 @@ public class ProductCategoriesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Route("ProductCategories/Create")]
-    public async Task<IActionResult> Create([Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
+    public async Task<IActionResult> Create(ProductCategory productcategory)
     {
-        if (ModelState.IsValid)
+        string endpoint = "http://localhost:44387/api/productCategory";
+
+        var response = await _httpClient.PostAsJsonAsync(endpoint, productcategory);
+
+        if (response.IsSuccessStatusCode)
         {
-            var endpoint = "http://localhost:44387/api/ProductCategory";
-            _httpClient.PostAsJsonAsync(endpoint, productcategory).Wait();
             return RedirectToAction(nameof(Index));
         }
-        return View(productcategory);
+        else
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the product.");
+            return View(productcategory);
+        }
     }
        
 
@@ -77,7 +84,7 @@ public class ProductCategoriesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Route("ProductCategories/Edit/{productcategoryid}")]
-    public async Task<IActionResult> Edit(int? productcategoryid, [Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
+    public async Task<IActionResult> Edit(int? productcategoryid, ProductCategory productcategory)
     {
        var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
         var response = _httpClient.PutAsJsonAsync(endpoint, productcategory).Result;
