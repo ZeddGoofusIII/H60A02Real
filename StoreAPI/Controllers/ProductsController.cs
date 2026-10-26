@@ -43,10 +43,11 @@ public class ProductsController : ControllerBase
     [HttpPut("{id}")]
     public IActionResult UpdateProduct(int id, Product product)
     {
-        if (id != product.ProductId)
+        product.ProductId = id;
+        /*if (id != product.ProductId)
         {
             return BadRequest();
-        }
+        }*/
         _storeRepo.UpdateProduct(product);
         return NoContent();
     }

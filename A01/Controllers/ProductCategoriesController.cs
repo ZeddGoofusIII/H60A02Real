@@ -51,10 +51,15 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Create")]
     public async Task<IActionResult> Create([Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
     {
-        var endpoint = "http://localhost:44387/api/ProductCategory";
-        _httpClient.PostAsJsonAsync(endpoint, productcategory).Wait();
-        return RedirectToAction(nameof(Index));
+        if (ModelState.IsValid)
+        {
+            var endpoint = "http://localhost:44387/api/ProductCategory";
+            _httpClient.PostAsJsonAsync(endpoint, productcategory).Wait();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(productcategory);
     }
+       
 
     // GET: PRODUCTCATEGORYS/Edit/5
     [Route("ProductCategories/Edit/{productcategoryid}")]
