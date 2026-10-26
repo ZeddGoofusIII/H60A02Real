@@ -5,6 +5,11 @@
 }
 
 <h1>Index</h1>
+<form asp-action="search" method="get">
+    <div class="form-group">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search products..." />
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>

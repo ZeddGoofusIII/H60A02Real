@@ -41,5 +41,7 @@ namespace StoreAPI.Model
         public void DeleteCustomer(int customerId);
 
         public void AddCustomer(Customer customer);
+
+        Task<List<Product>> SearchProducts(string searchTerm);
     }
 }

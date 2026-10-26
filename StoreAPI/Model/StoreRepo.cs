@@ -164,6 +164,11 @@ public class StoreRepo : IStoreRepo
         _context.Customers.Add(customer);
         save();
     }
+
+    public Task<List<Product>> SearchProducts(string searchTerm)
+    {
+        return Task.FromResult(_context.Products.Where(p => p.Description.Contains(searchTerm)).ToList());
+    }
 }
 
 

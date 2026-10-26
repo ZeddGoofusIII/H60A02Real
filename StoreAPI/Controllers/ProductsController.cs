@@ -72,4 +72,10 @@ public class ProductsController : ControllerBase
         _storeRepo.UpdatePrice(priceChange);
         return NoContent();
     }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<Product>>> SearchProducts([FromQuery] string searchTerm)
+    {
+        return await _storeRepo.SearchProducts(searchTerm);
+    }
 }

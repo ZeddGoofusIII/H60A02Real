@@ -30,5 +30,13 @@ namespace A01.Controllers
             return View(products);
         }
 
+        [Route("customerShop/search")]
+        public IActionResult Search([FromQuery] string searchTerm)
+        {
+            var endpoint = $"http://localhost:44387/api/Products/search?searchTerm={searchTerm}";
+            var response = _httpClient.GetAsync(endpoint).Result;
+            List<Product> products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
+            return View("Index", products);
+        }
     }
 }

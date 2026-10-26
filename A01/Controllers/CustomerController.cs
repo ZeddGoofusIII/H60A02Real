@@ -47,6 +47,10 @@ namespace A01.Controllers
         [HttpPost]
         public IActionResult Edit(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(customer);
+            }
             var endpoint = $"http://localhost:44387/api/Customer/{customer.CustomerId}";
             var response = _httpClient.PutAsJsonAsync(endpoint, customer).Result;
             if (response.IsSuccessStatusCode)
@@ -100,6 +104,10 @@ namespace A01.Controllers
         [HttpPost]
         public IActionResult Create(Customer customer)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(customer);
+            }
             var endpoint = $"http://localhost:44387/api/Customer";
             var response = _httpClient.PostAsJsonAsync(endpoint, customer).Result;
             if (response.IsSuccessStatusCode)

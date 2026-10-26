@@ -51,5 +51,7 @@ namespace StoreAPI.Controllers
             _storeRepo.DeleteCategory(id);
             return NoContent();
         }
+
+
     }
 }
