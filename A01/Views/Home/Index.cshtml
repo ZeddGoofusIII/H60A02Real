@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+   // ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
@@ -8,7 +8,7 @@
     <div>
         <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">View Products</a>
         <a class="nav-link" asp-area="" asp-controller="ProductCategories" asp-action="Index">View Categories</a>
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        <a class="nav-link" asp-area="CustomerShop" asp-page="Index">View Products as customer</a>
+         <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="nav-link" asp-controller="CustomerShop" asp-action="Index">View Products as customer</a>
     </div>
 </div>
