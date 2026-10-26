@@ -80,8 +80,12 @@ public class ProductCategoriesController : Controller
     public async Task<IActionResult> Edit(int? productcategoryid, [Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
     {
        var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
-        _httpClient.PutAsJsonAsync(endpoint, productcategory).Wait();
-        return RedirectToAction(nameof(Index));
+        var response = _httpClient.PutAsJsonAsync(endpoint, productcategory).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        return View(productcategory);
     }
 
     // GET: PRODUCTCATEGORYS/Delete/5

@@ -124,22 +124,23 @@ public class ProductsController : Controller
 
     [HttpPost]
     [Route("Products/UpdateStock/{productid}")]
-    public IActionResult UpdateStock(StockHelper helper)
+    public async Task<IActionResult> UpdateStock(StockHelper helper, int productid)
     {
-        string endpoint = $"http://localhost:44387/api/Products/Stockchange/{helper.Prodid}";
+        string endpoint = $"http://localhost:44387/api/Products/Stockchange/{productid}?stockChange={helper.StockChange}";
 
-        var response = _httpClient.PutAsJsonAsync(endpoint, helper.StockChange).Result;
+        var response = await _httpClient.PutAsJsonAsync(endpoint, helper);
 
         if (!response.IsSuccessStatusCode)
         {
             ModelState.AddModelError(string.Empty, "An error occurred while updating the stock.");
             return View(helper);
-        }   return RedirectToAction(nameof(Index));
+        }
+        return RedirectToAction(nameof(Index));
     }
 
 
     [Route("Products/EditPrice/{productid}")]
-    [Authorize("Manager")]
+    [Authorize(Roles = "Manager")]
     public IActionResult EditPrice(int productid)
     {
         string endpoint = $"http://localhost:44387/api/Products/{productid}";
@@ -159,14 +160,15 @@ public class ProductsController : Controller
 
     [HttpPost]
     [Route("Products/EditPrice/{productid}")]
-    [Authorize("Authorize")]
-    public IActionResult EditPrice(PriceHelper helper)
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> EditPrice(PriceHelper helper, int productid)
     {
+        helper.ProdId = productid;
         try
         {
             string endpoint = $"http://localhost:44387/api/Products/Pricechange/{helper.ProdId}";
 
-            var response = _httpClient.PutAsJsonAsync(endpoint, helper).Result;
+            var response = await _httpClient.PutAsJsonAsync(endpoint, helper);
 
             if (!response.IsSuccessStatusCode)
             {
