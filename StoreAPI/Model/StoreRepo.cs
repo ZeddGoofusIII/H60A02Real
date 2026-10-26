@@ -146,6 +146,7 @@ public class StoreRepo : IStoreRepo
     public void UpdateCustomer(Customer customer)
     {
         _context.Update(customer);
+        save();
     }
 
     public void DeleteCustomer(int customerId)
