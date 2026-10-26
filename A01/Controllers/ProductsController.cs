@@ -20,7 +20,7 @@ public class ProductsController : Controller
     // GET: PRODUCTS
     public IActionResult Index()    
     {
-        string endpoint = "https://localhost:44387/api/Products";
+        string endpoint = "http://localhost:44387/api/Products";
 
         var response = _httpClient.GetAsync(endpoint).Result;
         List<Product> products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
@@ -37,7 +37,7 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-        string endpoint = $"https://localhost:44387/api/Products/{productid.Value}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid.Value}";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 
@@ -57,7 +57,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Product product)
     {
-        string endpoint = "https://localhost:44387/api/Products";
+        string endpoint = "http://localhost:44387/api/Products";
 
         var response = await _httpClient.PostAsJsonAsync(endpoint, product);
 
@@ -83,7 +83,7 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-        string endpoint = $"https://localhost:44387/api/Products/{productid.Value}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid.Value}";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 
@@ -102,7 +102,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int? productid)
     {
-        string endpoint = $"https://localhost:44387/api/Products/{productid.Value}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid.Value}";
 
         var response = _httpClient.DeleteAsync(endpoint).Result;
 
@@ -124,25 +124,26 @@ public class ProductsController : Controller
 
     [HttpPost]
     [Route("Products/UpdateStock/{productid}")]
-    public IActionResult UpdateStock(StockHelper helper)
+    public async Task<IActionResult> UpdateStock(StockHelper helper, int productid)
     {
-        string endpoint = $"https://localhost:44387/api/Products/Stockchange/{helper.Prodid}";
+        string endpoint = $"http://localhost:44387/api/Products/Stockchange/{productid}?stockChange={helper.StockChange}";
 
-        var response = _httpClient.PutAsJsonAsync(endpoint, helper.StockChange).Result;
+        var response = await _httpClient.PutAsJsonAsync(endpoint, helper);
 
         if (!response.IsSuccessStatusCode)
         {
             ModelState.AddModelError(string.Empty, "An error occurred while updating the stock.");
             return View(helper);
-        }   return RedirectToAction(nameof(Index));
+        }
+        return RedirectToAction(nameof(Index));
     }
 
 
     [Route("Products/EditPrice/{productid}")]
-    [Authorize("Manager")]
+    [Authorize(Roles = "Manager")]
     public IActionResult EditPrice(int productid)
     {
-        string endpoint = $"https://localhost:44387/api/Products/{productid}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid}";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 
@@ -159,14 +160,15 @@ public class ProductsController : Controller
 
     [HttpPost]
     [Route("Products/EditPrice/{productid}")]
-    [Authorize("Authorize")]
-    public IActionResult EditPrice(PriceHelper helper)
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> EditPrice(PriceHelper helper, int productid)
     {
+        helper.ProdId = productid;
         try
         {
-            string endpoint = $"https://localhost:44387/api/Products/Pricechange/{helper.ProdId}";
+            string endpoint = $"http://localhost:44387/api/Products/Pricechange/{helper.ProdId}";
 
-            var response = _httpClient.PutAsJsonAsync(endpoint, helper).Result;
+            var response = await _httpClient.PutAsJsonAsync(endpoint, helper);
 
             if (!response.IsSuccessStatusCode)
             {

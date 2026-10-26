@@ -15,7 +15,7 @@ namespace A01.Controllers
         [HttpGet]
         public IActionResult Details(int? customerid)
         {
-            var endpoint = $"https://localhost:44387/api/products/{customerid.Value}";
+            var endpoint = $"http://localhost:44387/api/products/{customerid.Value}";
             var response = _httpClient.GetAsync(endpoint).Result;
             Product product = JsonSerializer.Deserialize<Product>(response.Content.ReadAsStringAsync().Result);
             return View(product);
@@ -24,7 +24,7 @@ namespace A01.Controllers
         [Route("CustomerShop")]
         public IActionResult Index()
         {
-            var endpoint = "https://localhost:44387/api/products";
+            var endpoint = "http://localhost:44387/api/Products";
             var response = _httpClient.GetAsync(endpoint).Result;
             List<Product> products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
             return View(products);

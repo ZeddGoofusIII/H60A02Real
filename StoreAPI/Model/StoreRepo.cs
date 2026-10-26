@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StoreAPI.Model;
 using StoreAPI.Services;
@@ -14,7 +15,7 @@ public class StoreRepo : IStoreRepo
         _context = context;
     } 
 
-    public void addCategory(ProductCategory category)
+    public void addCategory( ProductCategory category)
     {
         _context.Add(category);
         save();
@@ -114,7 +115,7 @@ public class StoreRepo : IStoreRepo
 
     Task<Product> IStoreRepo.GetProductById(int? productId)
     {
-        return Task.FromResult(_context.Products.Include(p => p.ProdCat).FirstOrDefault(x => x.ProductId == productId));
+        return Task.FromResult(_context.Products.FirstOrDefault(x => x.ProductId == productId));
     }
 
     Task<ProductCategory> IStoreRepo.GetCategoryById(int? categoryId)
@@ -124,7 +125,7 @@ public class StoreRepo : IStoreRepo
 
     Task<List<Product>> IStoreRepo.ProductsByCategory(int categoryId)
     {
-        return Task.FromResult(_context.Products.Where(p => p.ProductCategoryId == categoryId).Include(p => p.ProdCat).ToList());
+        return Task.FromResult(_context.Products.Where(p => p.ProductCategoryId == categoryId).ToList());
     }
 
     Task<List<Product>> IStoreRepo.GetProducts()
@@ -145,6 +146,7 @@ public class StoreRepo : IStoreRepo
     public void UpdateCustomer(Customer customer)
     {
         _context.Update(customer);
+        save();
     }
 
     public void DeleteCustomer(int customerId)

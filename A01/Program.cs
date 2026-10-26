@@ -12,7 +12,6 @@ builder.Services.AddDbContext<H60AssignmentDbZlContext>(options => options.UseSq
 builder.Services.AddDbContext<AccountContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AccountContext")));
 builder.Services.AddHttpClient();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<AccountContext>();
-builder.Services.AddScoped<IStoreRepo, StoreRepo>();
 //builder.Services.AddDbContext
 
 var app = builder.Build();
