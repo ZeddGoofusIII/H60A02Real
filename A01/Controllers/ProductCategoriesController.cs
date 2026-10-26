@@ -30,7 +30,7 @@ public class ProductCategoriesController : Controller
     [HttpGet]
     public IActionResult Details(int? productcategoryid)
     {
-       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+       var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
         var response = _httpClient.GetAsync(endpoint).Result;
         ProductCategory productcategory = JsonSerializer.Deserialize<ProductCategory>(response.Content.ReadAsStringAsync().Result);
         return View(productcategory);
@@ -51,7 +51,7 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Create")]
     public async Task<IActionResult> Create([Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
     {
-        var endpoint = "https://localhost:44387/api/ProductCategory";
+        var endpoint = "http://localhost:44387/api/ProductCategory";
         _httpClient.PostAsJsonAsync(endpoint, productcategory).Wait();
         return RedirectToAction(nameof(Index));
     }
@@ -60,7 +60,7 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Edit/{productcategoryid}")]
     public async Task<IActionResult> Edit(int? productcategoryid)
     {
-        var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+        var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
         var response = _httpClient.GetAsync(endpoint).Result;
         ProductCategory productcategory = JsonSerializer.Deserialize<ProductCategory>(response.Content.ReadAsStringAsync().Result);
         return View(productcategory);
@@ -74,7 +74,7 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Edit/{productcategoryid}")]
     public async Task<IActionResult> Edit(int? productcategoryid, [Bind("ProductCategoryId,ProdCat,Products")] ProductCategory productcategory)
     {
-       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+       var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
         _httpClient.PutAsJsonAsync(endpoint, productcategory).Wait();
         return RedirectToAction(nameof(Index));
     }
@@ -83,7 +83,7 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/Delete/{productid}")]
     public async Task<IActionResult> Delete(int? productcategoryid)
     {
-       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+       var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
         var response = _httpClient.GetAsync(endpoint).Result;
         ProductCategory productcategory = JsonSerializer.Deserialize<ProductCategory>(response.Content.ReadAsStringAsync().Result);
         return View(productcategory);
@@ -94,7 +94,7 @@ public class ProductCategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? productcategoryid)
     {
-       var endpoint = $"https://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
+       var endpoint = $"http://localhost:44387/api/ProductCategory/{productcategoryid.Value}";
         _httpClient.DeleteAsync(endpoint).Wait();
         return RedirectToAction(nameof(Index));
     }
@@ -102,7 +102,7 @@ public class ProductCategoriesController : Controller
     [Route("ProductCategories/ProductsInCategory/{Categoryid}")]
     public IActionResult ProductsInCategory(int Categoryid)
     {
-        var endpoint = $"https://localhost:44387/api/ProductCategory/ProductsInCategory/{Categoryid}";
+        var endpoint = $"http://localhost:44387/api/ProductCategory/ProductsInCategory/{Categoryid}";
         var response = _httpClient.GetAsync(endpoint).Result;
         var products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
         return View(products);

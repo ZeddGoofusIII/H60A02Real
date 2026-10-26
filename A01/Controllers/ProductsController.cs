@@ -20,7 +20,7 @@ public class ProductsController : Controller
     // GET: PRODUCTS
     public IActionResult Index()    
     {
-        string endpoint = "https://localhost:44387/api/Products";
+        string endpoint = "http://localhost:44387/api/Products";
 
         var response = _httpClient.GetAsync(endpoint).Result;
         List<Product> products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
@@ -37,7 +37,7 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-        string endpoint = $"https://localhost:44387/api/Products/{productid.Value}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid.Value}";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 
@@ -57,7 +57,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Product product)
     {
-        string endpoint = "https://localhost:44387/api/Products";
+        string endpoint = "http://localhost:44387/api/Products";
 
         var response = await _httpClient.PostAsJsonAsync(endpoint, product);
 
@@ -83,7 +83,7 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-        string endpoint = $"https://localhost:44387/api/Products/{productid.Value}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid.Value}";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 
@@ -102,7 +102,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int? productid)
     {
-        string endpoint = $"https://localhost:44387/api/Products/{productid.Value}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid.Value}";
 
         var response = _httpClient.DeleteAsync(endpoint).Result;
 
@@ -126,7 +126,7 @@ public class ProductsController : Controller
     [Route("Products/UpdateStock/{productid}")]
     public IActionResult UpdateStock(StockHelper helper)
     {
-        string endpoint = $"https://localhost:44387/api/Products/Stockchange/{helper.Prodid}";
+        string endpoint = $"http://localhost:44387/api/Products/Stockchange/{helper.Prodid}";
 
         var response = _httpClient.PutAsJsonAsync(endpoint, helper.StockChange).Result;
 
@@ -142,7 +142,7 @@ public class ProductsController : Controller
     [Authorize("Manager")]
     public IActionResult EditPrice(int productid)
     {
-        string endpoint = $"https://localhost:44387/api/Products/{productid}";
+        string endpoint = $"http://localhost:44387/api/Products/{productid}";
 
         var response = _httpClient.GetAsync(endpoint).Result;
 
@@ -164,7 +164,7 @@ public class ProductsController : Controller
     {
         try
         {
-            string endpoint = $"https://localhost:44387/api/Products/Pricechange/{helper.ProdId}";
+            string endpoint = $"http://localhost:44387/api/Products/Pricechange/{helper.ProdId}";
 
             var response = _httpClient.PutAsJsonAsync(endpoint, helper).Result;
 
