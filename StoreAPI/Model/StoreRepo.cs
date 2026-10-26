@@ -114,7 +114,7 @@ public class StoreRepo : IStoreRepo
 
     Task<Product> IStoreRepo.GetProductById(int? productId)
     {
-        return Task.FromResult(_context.Products.Include(p => p.ProdCat).FirstOrDefault(x => x.ProductId == productId));
+        return Task.FromResult(_context.Products.FirstOrDefault(x => x.ProductId == productId));
     }
 
     Task<ProductCategory> IStoreRepo.GetCategoryById(int? categoryId)
