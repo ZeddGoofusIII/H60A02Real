@@ -125,7 +125,7 @@ public class StoreRepo : IStoreRepo
 
     Task<List<Product>> IStoreRepo.ProductsByCategory(int categoryId)
     {
-        return Task.FromResult(_context.Products.Where(p => p.ProductCategoryId == categoryId).Include(p => p.ProdCat).ToList());
+        return Task.FromResult(_context.Products.Where(p => p.ProductCategoryId == categoryId).ToList());
     }
 
     Task<List<Product>> IStoreRepo.GetProducts()
