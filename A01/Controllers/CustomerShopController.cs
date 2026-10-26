@@ -29,5 +29,6 @@ namespace A01.Controllers
             List<Product> products = JsonSerializer.Deserialize<List<Product>>(response.Content.ReadAsStringAsync().Result);
             return View(products);
         }
+
     }
 }
