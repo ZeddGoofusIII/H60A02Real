@@ -40,10 +40,7 @@ namespace StoreAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateCategory(int id, ProductCategory category)
         {
-            if (id != category.ProductCategoryId)
-            {
-                return BadRequest();
-            }
+            category.ProductCategoryId = id;
             _storeRepo.UpdateCategory(category);
             return NoContent();
         }

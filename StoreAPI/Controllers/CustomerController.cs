@@ -42,10 +42,7 @@ namespace StoreAPI.Controllers
         [HttpPut("{customerId}")]
         public IActionResult UpdateCustomer(int customerId, Customer customer)
         {
-            if (customerId != customer.CustomerId)
-            {
-                return BadRequest();
-            }
+            customer.CustomerId = customerId;
             _storeRepo.UpdateCustomer(customer);
             return NoContent();
         }
